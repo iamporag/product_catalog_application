@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -24,7 +26,9 @@ class ApiClient extends GetxService {
     token = sharedPreferences.getString(AppConstants.TOKEN) ?? "";
     debugPrint('Token: $token');
     updateHeader(
-        token!, sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "");
+      token!,
+      sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "",
+    );
   }
 
   // Update headers
@@ -32,13 +36,16 @@ class ApiClient extends GetxService {
     _mainHeaders = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token',
-      AppConstants.LOCALIZATION_KEY: languageCode
+      AppConstants.LOCALIZATION_KEY: languageCode,
     };
   }
 
   // GET request
-  Future<Response> getData(String uri,
-      {Map<String, dynamic>? query, Map<String, String>? headers}) async {
+  Future<Response> getData(
+    String uri, {
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+  }) async {
     try {
       debugPrint('API Call: $uri\nToken: $token');
       final fullUri = Uri.parse('$appBaseUrl$uri');
@@ -54,8 +61,11 @@ class ApiClient extends GetxService {
   }
 
   // POST request
-  Future<Response> postData(String uri, dynamic body,
-      {Map<String, String>? headers}) async {
+  Future<Response> postData(
+    String uri,
+    dynamic body, {
+    Map<String, String>? headers,
+  }) async {
     try {
       debugPrint('API Call: $uri\nToken: $token\nBody: $body');
       final response = await http
@@ -74,13 +84,18 @@ class ApiClient extends GetxService {
 
   // POST multipart request
   Future<Response> postMultipartData(
-      String uri, Map<String, String> body, List<MultipartBody> multipartBody,
-      {Map<String, String>? headers}) async {
+    String uri,
+    Map<String, String> body,
+    List<MultipartBody> multipartBody, {
+    Map<String, String>? headers,
+  }) async {
     try {
       debugPrint('API Call: $uri\nToken: $token\nBody: $body');
 
-      final request =
-          http.MultipartRequest('POST', Uri.parse('$appBaseUrl$uri'));
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$appBaseUrl$uri'),
+      );
       request.headers.addAll(headers ?? _mainHeaders!);
 
       for (var multipart in multipartBody) {
@@ -95,12 +110,14 @@ class ApiClient extends GetxService {
           request.files.add(part);
         } else {
           final file = File(multipart.file.path);
-          request.files.add(http.MultipartFile(
-            multipart.key,
-            file.readAsBytes().asStream(),
-            file.lengthSync(),
-            filename: basename(file.path),
-          ));
+          request.files.add(
+            http.MultipartFile(
+              multipart.key,
+              file.readAsBytes().asStream(),
+              file.lengthSync(),
+              filename: basename(file.path),
+            ),
+          );
         }
       }
 
@@ -116,8 +133,11 @@ class ApiClient extends GetxService {
   }
 
   // PUT request
-  Future<Response> putData(String uri, dynamic body,
-      {Map<String, String>? headers}) async {
+  Future<Response> putData(
+    String uri,
+    dynamic body, {
+    Map<String, String>? headers,
+  }) async {
     try {
       debugPrint('API Call: $uri\nToken: $token\nBody: $body');
       final response = await http
@@ -135,8 +155,10 @@ class ApiClient extends GetxService {
   }
 
   // DELETE request
-  Future<Response> deleteData(String uri,
-      {Map<String, String>? headers}) async {
+  Future<Response> deleteData(
+    String uri, {
+    Map<String, String>? headers,
+  }) async {
     try {
       debugPrint('API Call: $uri\nToken: $token');
       final response = await http
@@ -185,8 +207,10 @@ class ApiClient extends GetxService {
         );
       }
     } else if (response.statusCode != 200 && body == null) {
-      apiResponse =
-          const Response(statusCode: 0, statusText: noInternetMessage);
+      apiResponse = const Response(
+        statusCode: 0,
+        statusText: noInternetMessage,
+      );
     }
 
     return apiResponse;

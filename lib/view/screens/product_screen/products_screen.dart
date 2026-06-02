@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_catalog_application/view/base/custom_button.dart';
+import 'package:product_catalog_application/view/base/custom_empty_state.dart';
 import '../../../controller/products_controller.dart';
 import '../../../helper/route_helper.dart';
 import '../../../theme/light_theme.dart';
@@ -64,7 +65,7 @@ class ProductsScreen extends StatelessWidget {
             },
             child: Column(
               children: [
-                // FIXED TOP SEARCH
+                // Search Field
                 Padding(
                   padding: const EdgeInsets.all(
                     Dimensions.PADDING_SIZE_DEFAULT,
@@ -79,14 +80,18 @@ class ProductsScreen extends StatelessWidget {
                   ),
                 ),
 
-                // GRID RESULT
+                // Gridview
                 Expanded(
                   child: controller.isProductsLoading
                       ? const Center(child: CircularProgressIndicator())
                       : controller.isError
-                      ? _buildErrorState(controller)
+                      ? _buildErrorState(controller, theme)
                       : controller.filteredList.isEmpty
-                      ? _buildEmptyState(theme)
+                      ? CustomEmptyState(
+                          icon: Icons.search_off_rounded,
+                          title: "No products found",
+                          subtitle: "Try searching with different keywords",
+                        )
                       : GridView.builder(
                           padding: const EdgeInsets.all(12),
                           itemCount: controller.filteredList.length,
@@ -116,7 +121,7 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-Widget _buildErrorState(ProductsController controller) {
+Widget _buildErrorState(ProductsController controller, ThemeData theme) {
   return Padding(
     padding: const EdgeInsets.symmetric(
       horizontal: Dimensions.PADDING_SIZE_DEFAULT,
@@ -131,7 +136,12 @@ Widget _buildErrorState(ProductsController controller) {
             color: AppColor.discountColor,
           ),
           const SizedBox(height: Dimensions.FREE_SIZE_DEFAULT),
-          const Text("Something went wrong"),
+          Text(
+            "Something went wrong",
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: Dimensions.FREE_SIZE_SMALL),
           Text(
             controller.errorMessage,
@@ -148,30 +158,6 @@ Widget _buildErrorState(ProductsController controller) {
           ),
         ],
       ),
-    ),
-  );
-}
-
-Widget _buildEmptyState(ThemeData theme) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.search_off_rounded, size: 80, color: Colors.grey.shade400),
-        const SizedBox(height: 16),
-        Text(
-          "No products found",
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          "Try searching with different keywords",
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodySmall,
-        ),
-      ],
     ),
   );
 }

@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 class AppConstants {
-  static const String APP_NAME = 'Project Structure';
+  static const String APP_NAME = 'Product Catalog';
   static const double APP_VERSION = 1.0;
 
   // BASE URL LINK

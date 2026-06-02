@@ -5,11 +5,9 @@ import '../view/screens/product_screen/favorite_screen.dart';
 import '../view/screens/product_screen/products_screen.dart';
 
 class RouteHelper {
-  // static const String initial = '/';
   static const String productScreen = '/product-screen';
   static const String productDetailScreen = '/product-details';
   static const String favorite = '/favorite';
-  //  static String getInitialRoute() => '$initial';
   static String getProductsRoute() => productScreen;
   static String getProductDetailsRoute(int id) => '$productDetailScreen?id=$id';
   static String getFavoriteRoute() => favorite;

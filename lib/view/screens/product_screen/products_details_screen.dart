@@ -22,7 +22,8 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Get.find<ProductsController>().getProductsDetails(id: widget.productId);
     });
   }
