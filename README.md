@@ -46,8 +46,8 @@ flutter pub get
 
 ## Requirements
 
-- Flutter SDK >= 3.0.0
-- Dart SDK >= 3.0.0
+- Flutter SDK >= 3.44.0
+- Dart SDK >= 3.12.0
 - Android Studio / VS Code
 
 ---
